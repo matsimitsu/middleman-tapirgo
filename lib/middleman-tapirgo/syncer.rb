@@ -1,25 +1,27 @@
 module Middleman
   module Tapirgo
 
-
     class Syncer
+
+      attr_reader :options
+      def initialize(options={})
+        @options = options
+      end
 
       def inst
         ::Middleman::Application.server.inst
       end
 
-      def options
-        Middleman::Tapirgo.options
+      def uri
+        URI("http://tapirgo.com/api/1/push_article.json?secret=#{options[:api_key]}")
       end
 
-      def uri
-        URI("http://tapirgo.com/api/1/push_article.json?secret=#{options.api_key}")
+      def syncable_items
+        @syncable_items ||= inst.sitemap.resources.select { |r| r.ext == '.html' }
       end
 
       def sync
-        return unless options.api_key
-
-        syncable_items = inst.sitemap.resources.select { |r| r.ext == '.html' }
+        return unless options[:api_key]
 
         syncable_items.each do |r|
           syncable_item = Middleman::Tapirgo::SyncableItem.new(r)
@@ -30,7 +32,7 @@ module Middleman
             break
           end
         end
-        puts "Synced #{syncable_items.length} to TapirGo"
+        puts "Synced #{syncable_items.length} items to TapirGo"
       end
 
       def send_to_tapirgo(item)
@@ -40,38 +42,5 @@ module Middleman
       end
     end
 
-    class SyncableItem
-
-      def initialize(resource)
-        @resource = resource
-      end
-
-      def content
-        @resource.render(:layout => nil)
-      end
-
-      def published_on
-        Time.parse(@resource.data['date'])
-      rescue
-        File.mtime(@resource.source_file)
-      end
-
-      def title
-        @resource.data['title'] || @resource.path
-      end
-
-      def link
-        @resource.path
-      end
-
-      def to_hash
-        {
-          :title => title,
-          :content => content,
-          :link => link,
-          :published_on => published_on
-        }
-      end
-    end
   end
 end

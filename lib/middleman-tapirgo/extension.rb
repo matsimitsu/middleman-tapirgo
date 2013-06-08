@@ -20,7 +20,7 @@ module Middleman
         options.api_key ||= nil
 
         app.after_build do |builder|
-          ::Middleman::Tapirgo::Syncer.new.sync
+          ::Middleman::Tapirgo::Syncer.new(options).sync
         end
 
         @@options = options

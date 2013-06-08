@@ -1,20 +1,11 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-require 'cucumber/rake/task'
-
-Cucumber::Rake::Task.new(:cucumber, 'Run features that should pass') do |t|
-  t.cucumber_opts = "--color --tags ~@wip --strict --format #{ENV['CUCUMBER_FORMAT'] || 'Fivemat'}"
-end
-
-require 'rake/clean'
-
-task :test => ["cucumber"]
-
+task :test => ['rspec']
 require "middleman-deploy/pkg-info"
 
-PACKAGE = "#{Middleman::Deploy::PACKAGE}"
-VERSION = "#{Middleman::Deploy::VERSION}"
+PACKAGE = "#{Middleman::Tapirgo::PACKAGE}"
+VERSION = "#{Middleman::Tapirgo::VERSION}"
 
 task :package do
   system "gem build #{PACKAGE}.gemspec"
