@@ -109,7 +109,7 @@ describe Middleman::Tapirgo::Syncer do
 
     it "should post the item to tapirgo" do
       WebMock.should have_requested(
-        :post, "http://tapirgo.com/api/1/push_article.json"
+        :post, "http://tapirgo.com/api/1/push_article.json?secret=bananas"
       ).with(
         :body => "{\"a\":\"b\"}",
         :headers => {

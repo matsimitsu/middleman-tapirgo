@@ -36,7 +36,7 @@ module Middleman
       end
 
       def send_to_tapirgo(item)
-        req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
+        req = Net::HTTP::Post.new("#{uri.path}?#{uri.query}", initheader = {'Content-Type' =>'application/json'})
         req.body = JSON.generate(item)
         Net::HTTP.new(uri.host, uri.port).start {|http| http.request(req) }
       end

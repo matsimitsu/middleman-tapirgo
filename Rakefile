@@ -19,7 +19,7 @@ end
 
 task :release => :package do
   Dir.chdir("pkg") do
-    system "gem push #{PACKAGE}-#{VERSION}"
+    system "gem push pkg/#{PACKAGE}-#{VERSION}"
   end
 end
 
