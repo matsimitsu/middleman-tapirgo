@@ -2,7 +2,7 @@ require 'bundler'
 Bundler::GemHelper.install_tasks
 
 task :test => ['rspec']
-require "middleman-deploy/pkg-info"
+require "middleman-tapirgo/pkg-info"
 
 PACKAGE = "#{Middleman::Tapirgo::PACKAGE}"
 VERSION = "#{Middleman::Tapirgo::VERSION}"
